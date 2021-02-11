@@ -271,7 +271,7 @@
                 let exactsolu=document.createElement("td");
                 exactsolu.innerHTML=(grid2[grid2.length-1][i]).toFixed(7);
                 let error=document.createElement("td");
-                error.innerHTML=(Math.abs(grid2[grid2.length-1][i]-grid[grid.length-1][i])).toFixed(8);
+                error.innerHTML=(Math.abs(grid2[grid2.length-1][i]-grid[grid.length-1][i])).toFixed(10);
                 row.appendChild(xval);
                 row.appendChild(nsolu);
                 row.appendChild(exactsolu);
