@@ -1,7 +1,7 @@
 <html>
     <head>
         <meta charset = "utf-8">
-        <title> HW2 Part 1</title>
+        <title> HW2 Part 2</title>
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
         <style>
             table, th, td 
@@ -38,14 +38,14 @@
         let grid=calculate();//calculates the explicit solution and stores it in grid
         let grid2=answer(); //gets the exact solution and stores it in grid2
         
-       
+      
         function init()
         {
             let linebreak = document.createElement("br");
             let prob = document.getElementById("problem");
 
             let probDescription = document.createElement("div");
-            probDescription.innerHTML="Solution to differential equation using three point central difference method";
+            probDescription.innerHTML="Solution to differential equation using one point backward difference method for Ux and central difference method for Uxx";
             prob.appendChild(probDescription);
             prob.appendChild(linebreak.cloneNode(true));
 
@@ -182,7 +182,7 @@
             for(let n=0; n<=2720; n++)    //time nodes
             {
                 let b=[]
-                for(let i=0; i<=401; i++)   //x
+                for(let i=0; i<=400; i++)   //x
                 {
                     b.push(Math.exp(n*deltat-i*deltax));
                 }
@@ -197,9 +197,9 @@
             for(let n=0; n<=2720; n++)    //time nodes
             {
                 let b=[]
-                for(let i=0; i<=401; i++)   //x nodes.... 401 is the dummy node used for boundry condition
+                for(let i=0; i<=400; i++)   //x nodes.... 401 is the dummy node used for boundry condition
                 {
-                    if(n==0&&i!=401)
+                    if(n==0)
                     {
                         b.push(Math.exp(-i*deltax));            //t=0 boundry condition
                     }
@@ -207,16 +207,16 @@
                     {
                         b.push(Math.exp(n*deltat));             //x = 0 boundry condition
                     }
-                    else if (i!=401)                            //middle solution
+                    else if (i!=400)                            //middle solution
                     {
                         let t1=(grid[n-1][i+1]-2*grid[n-1][i]+grid[n-1][i-1])/(deltax*deltax);
                         let t2=(grid[n-1][i+1]-grid[n-1][i-1])/(2*deltax);
                         let t3=grid[n-1][i];
                         b.push(grid[n-1][i]+deltat*(t1-t2-t3));
                     }
-                    else if (i==401)                            //right boundry condition, x==10... 
+                    else if (i==400)                            //right boundry condition, x==10... 
                     {
-                        b.push(b[399]-2*deltax*b[400]);         //set i==401 so that du/dx at i==400 is equal to U(10,t) 
+                        b.push(b[399]/(1+deltax));         //set i==401 so that du/dx at i==400 is equal to U(10,t) 
                     }
                 }
                 grid.push(b);
@@ -277,7 +277,7 @@
                 timenode.classList.add("legend");
                 row.appendChild(time);
                 row.appendChild(timenode);
-                for(b=0; b<grid[a].length-1; b++)
+                for(b=0; b<grid[a].length; b++)
                 {
                     let xBox=document.createElement("td");
                     xBox.innerHTML=(grid[a][b]).toFixed(4);
