@@ -75,6 +75,11 @@
             createBtn.addEventListener("click", fillTable);
             prob.appendChild(createBtn);
 
+            let showResults = document.createElement("button");                   
+            showResults.innerHTML = "Show Results at T=.85";
+            showResults.addEventListener("click", fillResults);
+            prob.appendChild(showResults);
+
             let graphBtn = document.createElement("button");
             graphBtn.innerHTML="Show Graph of U explicit and U exact at T=.85";
             graphBtn.addEventListener("click", showGraph);
@@ -223,6 +228,59 @@
             }
             return grid;
         }
+        function fillResults()
+        {
+            clear();
+            let prob = document.getElementById("problem");
+          
+            let table = document.createElement("table");
+            table.id="table";
+
+            let firstrow= document.createElement("tr");
+            let xlabel=document.createElement("td");
+            xlabel.innerHTML="X Value";
+            xlabel.classList.add("legend");
+            firstrow.appendChild(xlabel);
+
+            let solutionlabel=document.createElement("td");
+            solutionlabel.innerHTML="Numerical Solution";
+            solutionlabel.classList.add("legend");
+            firstrow.appendChild(solutionlabel);
+
+            let exactsolutionlabel=document.createElement("td");
+            exactsolutionlabel.innerHTML="Exact Solution";
+            exactsolutionlabel.classList.add("legend");
+            firstrow.appendChild(exactsolutionlabel);
+
+            let errorlabel=document.createElement("td");
+            errorlabel.innerHTML="Error";
+            errorlabel.classList.add("legend");
+            firstrow.appendChild(errorlabel);
+
+            table.appendChild(firstrow);
+
+            for(let i=0; i<grid[grid.length-1].length-1; i++)
+            {
+                let row= document.createElement("tr");
+                let xval=document.createElement("td");
+                xval.innerHTML=(i*deltax).toFixed(3);
+                let nsolu=document.createElement("td");
+                nsolu.innerHTML=(grid[grid.length-1][i]).toFixed(7);
+                let exactsolu=document.createElement("td");
+                exactsolu.innerHTML=(grid2[grid2.length-1][i]).toFixed(7);
+                let error=document.createElement("td");
+                error.innerHTML=(Math.abs(grid2[grid2.length-1][i]-grid[grid.length-1][i])).toFixed(8);
+                row.appendChild(xval);
+                row.appendChild(nsolu);
+                row.appendChild(exactsolu);
+                row.appendChild(error);
+                table.appendChild(row);
+            }
+
+
+            prob.appendChild(table);
+        }
+
 
         function fillTable()                                    //creates a table and fills table with the explicit solution 
         {
