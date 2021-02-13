@@ -198,33 +198,33 @@
 
         function calculate()            //returns the explicit solution using 3 point central difference, the given boundry conditions, and a time step of .0003125 (or 2721 total nodes)
         {
-            let grid = []
-            for(let n=0; n<=2720; n++)    //time nodes
+            let grid = []               //initialize the matrix
+            for(let n=0; n<=2720; n++)    //n is the current row index, n*deltat = time
             {
-                let b=[]
-                for(let i=0; i<=401; i++)   //x nodes.... 401 is the dummy node used for boundry condition
+                let b=[]                //create rows to add to the matrix
+                for(let i=0; i<=401; i++)   //i is the current column index, i*deltax = x..  index 401 is the dummy node used for x=10 boundry condition
                 {
-                    if(n==0&&i!=401)
+                    if(n==0&&i!=401)        //first row, but not dummy node
                     {
                         b.push(Math.exp(-i*deltax));            //t=0 boundry condition
                     }
-                    else if (i ==0)
+                    else if (i ==0)                     //first column
                     {
                         b.push(Math.exp(n*deltat));             //x = 0 boundry condition
                     }
-                    else if (i!=401)                            //middle solution
+                    else if (i!=401)                            //middle solution, most nodes are calculated this way
                     {
                         let t1=(grid[n-1][i+1]-2*grid[n-1][i]+grid[n-1][i-1])/(deltax*deltax);
                         let t2=(grid[n-1][i+1]-grid[n-1][i-1])/(2*deltax);
                         let t3=grid[n-1][i];
-                        b.push(grid[n-1][i]+deltat*(t1-t2-t3));
+                        b.push(grid[n-1][i]+deltat*(t1-t2-t3));                         //see handwritten derivation
                     }
                     else if (i==401)                            //right boundry condition, x==10... 
                     {
-                        b.push(b[399]-2*deltax*b[400]);         //set i==401 so that du/dx at i==400 is equal to U(10,t) 
+                        b.push(b[399]-2*deltax*b[400]);         //set index 401 so that du/dx at i==400 is equal to U(10,t) 
                     }
                 }
-                grid.push(b);
+                grid.push(b);   //adds the created row to the matrix
             }
             return grid;
         }

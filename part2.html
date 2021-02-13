@@ -197,13 +197,13 @@
             return grid2;
         }
 
-        function calculate()            //returns the explicit solution using 3 point central difference, the given boundry conditions, and a time step of .0003125 (or 2721 total nodes)
+        function calculate()            //returns the explicit solution using 1 point backward difference for ux and 3 point central difference for uxx, the given boundry conditions, and a time step of .0003125 (or 2721 total nodes)
         {
-            let grid = []
-            for(let n=0; n<=2720; n++)    //time nodes
+            let grid = []                   //create the matrix
+            for(let n=0; n<=2720; n++)    //time index, n*deltat=time
             {
                 let b=[]
-                for(let i=0; i<=400; i++)   //x nodes.... 401 is the dummy node used for boundry condition
+                for(let i=0; i<=400; i++)   //x index, i*deltax=x.... 
                 {
                     if(n==0)
                     {
@@ -213,19 +213,19 @@
                     {
                         b.push(Math.exp(n*deltat));             //x = 0 boundry condition
                     }
-                    else if (i!=400)                            //middle solution
+                    else if (i!=400)                            //middle solution, calculates most of the nodes
                     {
-                        let t1=(grid[n-1][i+1]-2*grid[n-1][i]+grid[n-1][i-1])/(deltax*deltax);
+                        let t1=(grid[n-1][i+1]-2*grid[n-1][i]+grid[n-1][i-1])/(deltax*deltax);      //see handwritten derivation
                         let t2=(grid[n-1][i+1]-grid[n-1][i-1])/(2*deltax);
                         let t3=grid[n-1][i];
                         b.push(grid[n-1][i]+deltat*(t1-t2-t3));
                     }
                     else if (i==400)                            //right boundry condition, x==10... 
                     {
-                        b.push(b[399]/(1+deltax));         //set i==401 so that du/dx at i==400 is equal to U(10,t) 
+                        b.push(b[399]/(1+deltax));         //see derivation for this equation
                     }
                 }
-                grid.push(b);
+                grid.push(b);       //adds row to the matrix
             }
             return grid;
         }
